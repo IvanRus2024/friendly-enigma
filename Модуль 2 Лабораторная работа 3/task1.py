@@ -24,7 +24,6 @@ class Book:
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name!r}, author={self.author!r})"
 
-
 # Класс для бумажных книг, наследуется от Book
 class PaperBook(Book):
     """Класс бумажной книги."""
@@ -32,23 +31,26 @@ class PaperBook(Book):
         # Инициализация базового класса
         super().__init__(name, author)
         # Проверка на корректность значения страниц (должно быть положительным целым числом)
-        if not isinstance(pages, int) or pages <= 0:
-            raise ValueError("Количество страниц должно быть положительным целым числом.")
-        self._pages = pages
+        self.pages = pages  # Вызов сеттера
 
     # Свойство для получения количества страниц (только чтение)
     @property
     def pages(self):
         return self._pages
 
-    # Переопределение метода __str__ для бумажных книг
-    def __str__(self):
-        return f"Книга {self.name}. Автор {self.author}. Количество страниц: {self.pages}"
+    @pages.setter
+    def pages(self, value: int):
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("Количество страниц должно быть положительным целым числом.")
+        self._pages = value
 
-    # Переопределение метода __repr__ для бумажных книг
+    # Переопределение метода str для бумажных книг
+    def __str__(self):
+        return super().__str__() + f". Количество страниц: {self.pages}"
+
+    # Переопределение метода repr для бумажных книг
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name!r}, author={self.author!r}, pages={self.pages})"
-
 
 # Класс для аудиокниг, наследуется от Book
 class AudioBook(Book):
@@ -57,23 +59,26 @@ class AudioBook(Book):
         # Инициализация базового класса
         super().__init__(name, author)
         # Проверка на корректность значения продолжительности (должно быть положительным числом)
-        if not isinstance(duration, (int, float)) or duration <= 0:
-            raise ValueError("Продолжительность должна быть положительным числом.")
-        self._duration = duration
+        self.duration = duration  # Вызов сеттера
 
     # Свойство для получения продолжительности книги (только чтение)
     @property
     def duration(self):
         return self._duration
 
-    # Переопределение метода __str__ для аудиокниг
-    def __str__(self):
-        return f"Книга {self.name}. Автор {self.author}. Продолжительность: {self.duration:.2f} часов"
+    @duration.setter
+    def duration(self, value: float):
+        if not isinstance(value, (int, float)) or value <= 0:
+            raise ValueError("Продолжительность должна быть положительным числом.")
+        self._duration = value
 
-    # Переопределение метода __repr__ для аудиокниг
+    # Переопределение метода str для аудиокниг
+    def __str__(self):
+        return super().__str__() + f". Продолжительность: {self.duration:.2f} часов"
+
+    # Переопределение метода repr для аудиокниг
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name!r}, author={self.author!r}, duration={self.duration:.2f})"
-
 
 # Пример использования классов:
 try:
@@ -81,7 +86,7 @@ try:
     paper_book = PaperBook("Война и мир", "Лев Толстой", 1225)  # Бумажная книга
     audio_book = AudioBook("1984", "Джордж Оруэлл", 11.5)  # Аудиокнига
 
-    # Вывод информации о книгах в удобном формате (__str__)
+    # Вывод информации о книгах в удобном формате
     print(paper_book)  # Книга Война и мир. Автор Лев Толстой. Количество страниц: 1225
     print(audio_book)  # Книга 1984. Автор Джордж Оруэлл. Продолжительность: 11.50 часов
 
